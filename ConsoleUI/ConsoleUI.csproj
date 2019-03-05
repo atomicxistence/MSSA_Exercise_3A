@@ -42,11 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Display.cs" />
+    <Compile Include="Input.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="Option.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TaskTracker\TaskTracker.csproj">
+      <Project>{52A101CB-E975-4AE6-949F-366175E8DDC8}</Project>
+      <Name>TaskTracker</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
