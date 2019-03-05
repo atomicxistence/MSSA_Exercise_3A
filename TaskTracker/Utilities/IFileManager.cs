@@ -4,6 +4,6 @@
 	{
 		TaskList Load();
 
-		bool Save(TaskList taskList);
+		void Save(TaskList taskList);
 	}
 }

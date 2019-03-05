@@ -8,10 +8,7 @@
 		public Taskr()
 		{
 			fileManager = new XMLFileManager();
-			if(Load())
-			{
-				taskList = new TaskList();
-			}
+			LoadTaskList();
 		}
 
 		public Page GetPage(int pageIndex)
@@ -35,13 +32,12 @@
 			}
 		}
 
-		private bool Load()
+		private void LoadTaskList()
 		{
 			taskList = fileManager.Load();
-			return taskList == null;
 		}
 
-		public void Save()
+		public void SaveTaskList()
 		{
 			fileManager.Save(taskList);
 		}
