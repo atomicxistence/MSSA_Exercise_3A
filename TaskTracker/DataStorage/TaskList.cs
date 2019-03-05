@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace TaskTracker
 {
-	class TaskList
+	public class TaskList
     {
-        public Queue<Page> Pages {get; private set;}
+        public List<Page> Pages {get; private set;}
     }
 }

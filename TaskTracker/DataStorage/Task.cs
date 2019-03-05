@@ -2,7 +2,7 @@ using System;
 
 namespace TaskTracker
 {
-	class Task
+	public class Task
     {
         public string Title {get; private set;}
 		public DateTime TimeStamp { get; private set; }
@@ -13,6 +13,8 @@ namespace TaskTracker
         {
             Title = title;
 			TimeStamp = DateTime.Now;
+			IsActioned = false;
+			IsCompleted = false;
         }
 
         public void Actioned()
