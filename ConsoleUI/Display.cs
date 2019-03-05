@@ -10,6 +10,8 @@ namespace ConsoleUI
 		private int widthMin = 80;
 		private int heightMin = Global.PageSize + 10;
 
+		private Selection currentSelection;
+
 		public Display()
 		{
 			Initialize();
@@ -19,17 +21,29 @@ namespace ConsoleUI
 		{
 			SetWindowSize();
 			Console.CursorVisible = false;
-			
+			currentSelection = new Selection(0, 0);
+			CompleteRefresh();
 		}
 
-		public void Refresh(Page currentPage)
+		public void Refresh(Page currentPage, Selection newSelection)
 		{
 			if (WindowSizeHasChanged())
 			{
 				CompleteRefresh();
 			}
 
-			// print effected tasks
+			if (currentSelection.ItemIndex != newSelection.ItemIndex)
+			{
+				// print current selection
+				// print new selection
+				currentSelection = new Selection(newSelection.ItemIndex, newSelection.PageIndex);
+			}
+
+			if (currentSelection.PageIndex != newSelection.PageIndex)
+			{
+				// print page
+				currentSelection = new Selection(newSelection.ItemIndex, newSelection.PageIndex);
+			}
 		}
 
 		private void SetWindowSize()

@@ -19,6 +19,8 @@ namespace TaskTracker
 			return taskList.Pages[pageIndex];
 		}
 
+		public int GetTotalPageCount() => taskList.Pages.Count;
+
 		public void AddTask(string taskTitle)
 		{
 			var task = new Task(taskTitle);

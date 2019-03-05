@@ -4,52 +4,74 @@ namespace ConsoleUI
 {
 	public class Input
 	{
-
-		public int ListSelection(int totalItems)
+		public InputType Selection(SelectionType selectionType)
 		{
-			int selectionItem = 0;
-			bool isSelecting = true;
+			var input = Console.ReadKey();
 
-			do
+			switch (selectionType)
 			{
-				var input = Console.ReadKey();
+				case SelectionType.TaskPageSelection:
+					return TaskSelect(input.Key);
+				case SelectionType.TaskActionSelection:
+					return ActionSelect(input.Key);
+				case SelectionType.YesNoSubSelection:
+					return YesNoSelect(input.Key);
+				default:
+					return InputType.Invalid;
+			}
+		}
 
-				switch (input.Key)
-				{
-					case ConsoleKey.Enter:
-						isSelecting = false;
-						break;
-					case ConsoleKey.UpArrow:
-						if (selectionItem == 0)
-						{
-							selectionItem = totalItems - 1;
-						}
-						else
-						{
-							selectionItem -= 1;
-						}
-						isSelecting = true;
-						break;
-					case ConsoleKey.DownArrow:
-						if (selectionItem == totalItems - 1)
-						{
-							selectionItem = 0;
-						}
-						else
-						{
-							selectionItem += 1;
-						}
-						isSelecting = true;
-						break;
-					case ConsoleKey.RightArrow:
-						break;
-					case ConsoleKey.LeftArrow:
-						break;
-				}
+		private InputType TaskSelect(ConsoleKey input)
+		{
+			switch (input)
+			{
+				case ConsoleKey.Enter:
+					return InputType.Select;
+				case ConsoleKey.UpArrow:
+					return InputType.PreviousItem;
+				case ConsoleKey.DownArrow:
+					return InputType.NextItem;
+				case ConsoleKey.RightArrow:
+					return InputType.NextPage;
+				case ConsoleKey.LeftArrow:
+					return InputType.PreviousPage;
+				case ConsoleKey.Escape:
+					return InputType.Quit;
+				default:
+					return InputType.Invalid;
+			}
+		}
 
-			} while (isSelecting);
+		private InputType ActionSelect(ConsoleKey input)
+		{
+			switch (input)
+			{
+				case ConsoleKey.Enter:
+					return InputType.Select;
+				case ConsoleKey.UpArrow:
+					return InputType.PreviousItem;
+				case ConsoleKey.DownArrow:
+					return InputType.NextItem;
+				case ConsoleKey.Escape:
+					return InputType.Back;
+				default:
+					return InputType.Invalid;
+			}
+		}
 
-			return selectionItem;
+		private InputType YesNoSelect(ConsoleKey input)
+		{
+			switch (input)
+			{
+				case ConsoleKey.Enter:
+					return InputType.Select;
+				case ConsoleKey.UpArrow:
+					return InputType.PreviousItem;
+				case ConsoleKey.DownArrow:
+					return InputType.NextItem;
+				default:
+					return InputType.Invalid;
+			}
 		}
 	}
 }

@@ -2,12 +2,6 @@
 
 namespace ConsoleUI
 {
-	public enum MenuType
-	{
-		TaskMenu,
-		YesNoMenu,
-	}
-
 	public class Menu
 	{
 		public List<Option> Items { get; private set; }
