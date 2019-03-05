@@ -3,12 +3,12 @@
 	public struct Option
 	{
 		public string Title { get; private set; }
-		public int Index { get; private set; }
+		public OptionType Action { get; private set; }
 
-		public Option(string title, int index)
+		public Option(string title, OptionType action)
 		{
 			Title = title;
-			Index = index;
+			Action = action;
 		}
 	}
 }

@@ -46,6 +46,12 @@ namespace ConsoleUI
 			}
 		}
 
+		public void SubMenuRefresh(Menu subMenu, Selection newSelection)
+		{
+			//print border
+
+		}
+
 		private void SetWindowSize()
 		{
 			Console.SetWindowSize(widthMin, heightMin);

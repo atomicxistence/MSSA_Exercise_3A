@@ -24,4 +24,13 @@
 		TaskActionSelection,
 		YesNoSubSelection,
 	}
+
+	public enum OptionType
+	{
+		Yes,
+		No,
+		ActionTask,
+		CompleteTask,
+		Back,
+	}
 }
