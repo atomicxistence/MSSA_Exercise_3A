@@ -1,4 +1,7 @@
-﻿namespace TaskTracker
+﻿using System;
+using System.IO;
+
+namespace TaskTracker
 {
 	public class Taskr
 	{
@@ -20,7 +23,7 @@
 		{
 			var task = new Task(taskTitle);
 
-			if (taskList.Pages[taskList.Pages.Count].IsFull)
+			if (taskList.Pages[taskList.Pages.Count - 1].IsFull)
 			{
 				var newPage = new Page();
 				newPage.Tasks.Add(task);
@@ -28,13 +31,20 @@
 			}
 			else
 			{
-				taskList.Pages[taskList.Pages.Count].Tasks.Add(task);
+				taskList.Pages[taskList.Pages.Count - 1].Tasks.Add(task);
 			}
 		}
 
 		private void LoadTaskList()
 		{
-			taskList = fileManager.Load();
+			try
+			{
+				taskList = fileManager.Load();
+			}
+			catch (FileNotFoundException)
+			{
+				taskList = new TaskList();
+			}
 		}
 
 		public void SaveTaskList()

@@ -41,6 +41,10 @@ namespace ConsoleUI
 						}
 						isSelecting = true;
 						break;
+					case ConsoleKey.RightArrow:
+						break;
+					case ConsoleKey.LeftArrow:
+						break;
 				}
 
 			} while (isSelecting);
