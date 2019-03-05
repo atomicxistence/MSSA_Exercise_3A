@@ -10,7 +10,18 @@ namespace ConsoleUI
 		private int widthMin = 80;
 		private int heightMin = Global.PageSize + 10;
 
+		private string prompt = "🡅 🡇 : Tasks | 🡄 🡆 : Pages | N  : New Task  | Esc : Quit";
+
 		private Selection currentSelection;
+		private Selection nextSelection;
+		private Page currentPage;
+
+		private ConsoleColor colorBorder = ConsoleColor.DarkGray;
+		private ConsoleColor colorTitleBackground = ConsoleColor.Gray;
+		private ConsoleColor colorTitle = ConsoleColor.Black;
+		private ConsoleColor colorTaskActioned = ConsoleColor.DarkGray;
+		private ConsoleColor colorTaskSelectedBG = ConsoleColor.White;
+		private ConsoleColor colorTaskSelectedFG = ConsoleColor.Black;
 
 		public Display()
 		{
@@ -25,31 +36,40 @@ namespace ConsoleUI
 			CompleteRefresh();
 		}
 
-		public void Refresh(Page currentPage, Selection newSelection)
+		public void Refresh(Page currentPage, Selection nextSelection)
 		{
+			this.currentPage = currentPage;
+			this.nextSelection = nextSelection;
+
 			if (WindowSizeHasChanged())
 			{
 				CompleteRefresh();
 			}
 
-			if (currentSelection.ItemIndex != newSelection.ItemIndex)
+			if (currentSelection.ItemIndex != nextSelection.ItemIndex)
 			{
-				// print current selection
-				// print new selection
-				currentSelection = new Selection(newSelection.ItemIndex, newSelection.PageIndex);
+				PrintSelections();
+				currentSelection = new Selection(nextSelection.ItemIndex, nextSelection.PageIndex);
 			}
 
-			if (currentSelection.PageIndex != newSelection.PageIndex)
+			if (currentSelection.PageIndex != nextSelection.PageIndex)
 			{
-				// print page
-				currentSelection = new Selection(newSelection.ItemIndex, newSelection.PageIndex);
+				PrintPageContents();
+				currentSelection = new Selection(nextSelection.ItemIndex, nextSelection.PageIndex);
 			}
 		}
 
 		public void SubMenuRefresh(Menu subMenu, Selection newSelection)
 		{
-			//print border
+			// print submenu border
+			// print submenu items
+		}
 
+		public void NewTaskEntry()
+		{
+			var prompt = "Create a New Task";
+			// print new task border
+			// print prompt
 		}
 
 		private void SetWindowSize()
@@ -84,10 +104,36 @@ namespace ConsoleUI
 		private void CompleteRefresh()
 		{
 			Console.Clear();
-			// print title
-			// print subtitle
-			// print border
-			// print list
+			PrintTitle();
+			PrintPrompt();
+			PrintBorder();
+			PrintPageContents();
+		}
+
+		private void PrintSelections()
+		{
+			// print previous task with default colors
+			// print next task with highlight colors
+		}
+
+		private void PrintPageContents()
+		{
+			// print the entire contents of the page
+		}
+
+		private void PrintTitle()
+		{
+
+		}
+
+		private void PrintPrompt()
+		{
+
+		}
+
+		private void PrintBorder()
+		{
+
 		}
 	}
 }

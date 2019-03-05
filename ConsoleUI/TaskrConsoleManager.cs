@@ -76,7 +76,10 @@ namespace ConsoleUI
 					}
 					break;
 				case InputType.Select:
-					TaskSubMenu(taskr.GetPage(currentSelection.PageIndex).Tasks[currentSelection.ItemIndex]);
+					TaskSubMenu();
+					break;
+				case InputType.NewTask:
+					CreateNewTask();
 					break;
 				case InputType.Quit:
 					if (QuitSubMenu())
@@ -94,11 +97,12 @@ namespace ConsoleUI
 			}
 		}
 
-		private void TaskSubMenu(Task task)
+		private void TaskSubMenu()
 		{
 			var taskMenuAction = InputType.Invalid;
 			var subSelection = new Selection(0, 0);
 			var taskSubMenu = new Menu(MenuType.TaskMenu);
+			var task = currentPage.Tasks[currentSelection.ItemIndex];
 
 			while (true)
 			{
@@ -135,10 +139,11 @@ namespace ConsoleUI
 						switch (taskSubMenu.Items[subSelection.ItemIndex].Action)
 						{
 							case OptionType.ActionTask:
-								currentPage.Tasks[currentSelection.ItemIndex].Actioned();
+								task.Actioned();
+								taskr.AddTask(task.Title);
 								break;
 							case OptionType.CompleteTask:
-								currentPage.Tasks[currentSelection.ItemIndex].Completed();
+								task.Completed();
 								break;
 							case OptionType.Back:
 								break;
@@ -199,6 +204,13 @@ namespace ConsoleUI
 				}
 			}
 
+		}
+
+		private void CreateNewTask()
+		{
+			display.NewTaskEntry();
+			var input = Console.ReadLine();
+			taskr.AddTask(input);
 		}
 	}
 }

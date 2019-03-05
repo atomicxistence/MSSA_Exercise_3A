@@ -27,6 +27,8 @@ namespace ConsoleUI
 			{
 				case ConsoleKey.Enter:
 					return InputType.Select;
+				case ConsoleKey.N:
+					return InputType.NewTask;
 				case ConsoleKey.UpArrow:
 					return InputType.PreviousItem;
 				case ConsoleKey.DownArrow:

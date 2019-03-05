@@ -13,6 +13,7 @@
 		NextPage,
 		PreviousPage,
 		Select,
+		NewTask,
 		Quit,
 		Back,
 		Invalid,
