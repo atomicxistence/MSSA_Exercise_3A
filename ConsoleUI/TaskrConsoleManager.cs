@@ -11,6 +11,8 @@ namespace ConsoleUI
 		private Selection currentSelection = new Selection(0, 0);
 		private Page currentPage;
 
+		private bool menuHasClosed;
+
 		public void Run()
 		{
 			Console.OutputEncoding = System.Text.Encoding.Unicode;
@@ -19,7 +21,8 @@ namespace ConsoleUI
 			while (true)
 			{
 				currentPage = taskr.GetPage(currentSelection.PageIndex);
-				display.Refresh(currentPage, currentSelection);
+				display.Refresh(currentPage, currentSelection, menuHasClosed);
+				menuHasClosed = false;
 
 				InputType action = InputType.Invalid;
 				do
@@ -80,9 +83,11 @@ namespace ConsoleUI
 					break;
 				case InputType.Select:
 					TaskSubMenu();
+					menuHasClosed = true;
 					break;
 				case InputType.NewTask:
 					CreateNewTask();
+					menuHasClosed = true;
 					break;
 				case InputType.Quit:
 					if (QuitSubMenu())
@@ -92,10 +97,9 @@ namespace ConsoleUI
 					}
 					break;
 				case InputType.Back:
+					menuHasClosed = true;
 					break;
 				case InputType.Invalid:
-					break;
-				default:
 					break;
 			}
 		}
@@ -113,7 +117,7 @@ namespace ConsoleUI
 			{
 				do
 				{
-					display.Refresh(currentPage, currentSelection);
+					display.Refresh(currentPage, currentSelection, menuHasClosed);
 					display.SubMenuRefresh(taskSubMenu, subMenuSelection);
 					taskMenuAction = input.Selection(SelectionType.TaskActionSelection);
 				} while (taskMenuAction == InputType.Invalid);
@@ -146,6 +150,7 @@ namespace ConsoleUI
 							case OptionType.ActionTask:
 								task.Actioned();
 								taskr.CopyTaskToEndOfList(task);
+								menuHasClosed = true;
 								break;
 							case OptionType.CompleteTask:
 								if (!task.IsActioned)
@@ -153,14 +158,17 @@ namespace ConsoleUI
 									task.Actioned();
 								}
 								task.Completed();
+								menuHasClosed = true;
 								break;
 							case OptionType.Back:
+								menuHasClosed = true;
 								break;
 							default:
 								break;
 						}
 						break;
 					case InputType.Back:
+						menuHasClosed = true;
 						break;
 					case InputType.Invalid:
 						break;
@@ -179,7 +187,7 @@ namespace ConsoleUI
 			{
 				do
 				{
-					display.Refresh(currentPage, currentSelection);
+					display.Refresh(currentPage, currentSelection, menuHasClosed);
 					display.SubMenuRefresh(quitMenu, subSelection);
 					quitMenuAction = input.Selection(SelectionType.YesNoSubSelection);
 				} while (quitMenuAction == InputType.Invalid);
@@ -207,6 +215,7 @@ namespace ConsoleUI
 						}
 						break;
 					case InputType.Select:
+						menuHasClosed = true;
 						return quitMenu.Items[subSelection.ItemIndex].Action == OptionType.Yes;
 					case InputType.Invalid:
 						break;
@@ -218,7 +227,9 @@ namespace ConsoleUI
 		private void CreateNewTask()
 		{
 			display.NewTaskEntry();
+			Console.CursorVisible = true;
 			var input = Console.ReadLine();
+			Console.CursorVisible = false;
 			taskr.AddTask(input);
 		}
 	}
