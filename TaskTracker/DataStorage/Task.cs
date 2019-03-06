@@ -18,6 +18,14 @@ namespace TaskTracker
 			IsCompleted = false;
         }
 
+		public Task(string title, DateTime timeStamp)
+		{
+			Title = title;
+			TimeStamp = timeStamp;
+			IsActioned = false;
+			IsCompleted = false;
+		}
+
         public void Actioned()
         {
             IsActioned = true;

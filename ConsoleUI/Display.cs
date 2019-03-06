@@ -15,17 +15,19 @@ namespace ConsoleUI
 		private int pageTopOffset;
 		private int pageLeftOffset = 2;
 
-		private string prompt = "🡅 🡇 : Tasks | 🡄 🡆 : Pages | N  : New Task  | Esc : Quit";
+		private string prompt = "▲ ▼ Tasks | ◄ ► Pages | N = New Task  | Esc = Quit";
 
 		private Selection currentSelection;
 		private Selection nextSelection;
 		private Page currentPage;
 
-		private ConsoleColor colorBorder = ConsoleColor.DarkGray;
-		private ConsoleColor colorTitleBackground = ConsoleColor.Blue;
-		private ConsoleColor colorTitle = ConsoleColor.Black;
+		private ConsoleColor colorSubMenuBG = ConsoleColor.DarkGray;
+		private ConsoleColor colorSubMenuFG = ConsoleColor.Black;
+		private ConsoleColor colorTitleBG = ConsoleColor.DarkGray;
+		private ConsoleColor colorTitleFG = ConsoleColor.Cyan;
+		private ConsoleColor colorPromptFG = ConsoleColor.Cyan;
 		private ConsoleColor colorTaskActioned = ConsoleColor.DarkGray;
-		private ConsoleColor colorTaskSelectedBG = ConsoleColor.DarkYellow;
+		private ConsoleColor colorTaskSelectedBG = ConsoleColor.White;
 		private ConsoleColor colorTaskSelectedFG = ConsoleColor.Black;
 
 		private string selectionIndicator = " ► ";
@@ -76,16 +78,33 @@ namespace ConsoleUI
 			}
 		}
 
-		public void SubMenuRefresh(Menu subMenu, Selection newSelection)
+		public void SubMenuCompleteRefresh(Menu subMenu, Selection nextSubSelection)
 		{
-			// print submenu border
-			// print submenu items
+
+		}
+
+		public void SubMenuRefresh(Menu subMenu, Selection nextSubSelection)
+		{
+			if (WindowSizeHasChanged())
+			{
+				SubMenuCompleteRefresh(subMenu, nextSubSelection);
+			}
+
+			if (currentSelection.ItemIndex != this.nextSelection.ItemIndex)
+			{
+				PrintSubSelections();
+				currentSelection = new Selection(this.nextSelection.ItemIndex, this.nextSelection.PageIndex);
+			}
+		}
+
+		private void PrintSubSelections()
+		{
+			//
 		}
 
 		public void NewTaskEntry()
 		{
-			prompt = "Create a New Task";
-			// print new task border
+			// print new task field
 			// print prompt
 		}
 
@@ -151,7 +170,7 @@ namespace ConsoleUI
 		private void PrintCurrentSelection(Task currentTask)
 		{
 			Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset,
-												  pageTopOffset + currentSelection.ItemIndex);
+									  centeredWindowTop + pageTopOffset + currentSelection.ItemIndex);
 			PrintEmptySpaceFill(widthMin - pageLeftOffset);
 
 			if (currentTask.IsActioned)
@@ -160,7 +179,7 @@ namespace ConsoleUI
 			}
 
 			Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset,
-									  pageTopOffset + currentSelection.ItemIndex);
+									  centeredWindowTop + pageTopOffset + currentSelection.ItemIndex);
 			Console.Write(currentTask.Title);
 		}
 
@@ -169,7 +188,7 @@ namespace ConsoleUI
 			Console.ForegroundColor = nextTask.IsActioned ? colorTaskActioned : colorTaskSelectedFG;
 			Console.BackgroundColor = colorTaskSelectedBG;
 			Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset,
-									  pageTopOffset + nextSelection.ItemIndex);
+									  centeredWindowTop + pageTopOffset + nextSelection.ItemIndex);
 			Console.Write($"{selectionIndicator}{nextTask.Title}");
 			PrintEmptySpaceFill(widthMin - pageLeftOffset - nextTask.Title.Length - selectionIndicator.Length);
 			Console.ResetColor();
@@ -178,18 +197,19 @@ namespace ConsoleUI
 		private void PrintTitle()
 		{
 			Console.SetCursorPosition(centeredWindowLeft, centeredWindowTop);
-			Console.ForegroundColor = colorTitle;
-			Console.BackgroundColor = colorTitleBackground;
+			Console.ForegroundColor = colorTitleFG;
+			Console.BackgroundColor = colorTitleBG;
+
 			// Write Background Color
-			for (int i = 0; i < title.Length; i++)
+			for (int i = 0; i <= title.Length; i++)
 			{
 				PrintEmptySpaceFill(widthMin);
-				Console.Write("\n");
+				Console.SetCursorPosition(centeredWindowLeft, centeredWindowTop + i);
 			}
 			// Write Centered Title
 			for (int i = 0; i < title.Length; i++)
 			{
-				Console.SetCursorPosition(centeredWindowLeft + (title[i].Length / 2), centeredWindowTop + i);
+				Console.SetCursorPosition(centeredWindowLeft + ((widthMin / 2) - (title[i].Length / 2)), centeredWindowTop + i);
 				Console.Write(title[i]);
 			}
 			Console.ResetColor();
@@ -197,8 +217,10 @@ namespace ConsoleUI
 
 		private void PrintPrompt()
 		{
-			Console.SetCursorPosition(centeredWindowLeft + (prompt.Length / 2), centeredWindowTop + title.Length);
+			Console.ForegroundColor = colorPromptFG;
+			Console.SetCursorPosition(centeredWindowLeft + ((widthMin / 2) - (prompt.Length / 2)), centeredWindowTop + title.Length);
 			Console.Write(prompt);
+			Console.ResetColor();
 		}
 
 		private void PrintBorder()
@@ -210,7 +232,7 @@ namespace ConsoleUI
 		{
 			for (int i = 0; i < currentPage.Tasks.Count; i++)
 			{
-				Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset, pageTopOffset + i);
+				Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset, centeredWindowTop + pageTopOffset + i);
 				Console.Write(currentPage.Tasks[i].Title);
 			}
 		}

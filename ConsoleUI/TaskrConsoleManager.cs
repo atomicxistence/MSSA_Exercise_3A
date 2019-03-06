@@ -13,6 +13,7 @@ namespace ConsoleUI
 
 		public void Run()
 		{
+			Console.OutputEncoding = System.Text.Encoding.Unicode;
 			display.Initialize(taskr.GetPage(currentSelection.PageIndex));
 
 			while (true)
@@ -105,6 +106,8 @@ namespace ConsoleUI
 			var subSelection = new Selection(0, 0);
 			var taskSubMenu = new Menu(MenuType.TaskMenu);
 			var task = currentPage.Tasks[currentSelection.ItemIndex];
+
+			display.SubMenuCompleteRefresh(taskSubMenu, subSelection);
 
 			while (true)
 			{

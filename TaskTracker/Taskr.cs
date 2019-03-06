@@ -29,7 +29,8 @@ namespace TaskTracker
 
 		public void CopyTaskToEndOfList(Task task)
 		{
-			InsertTaskOnLastPage(task);
+			var newTask = new Task(task.Title, task.TimeStamp);
+			InsertTaskOnLastPage(newTask);
 		} 
 
 		private void InsertTaskOnLastPage(Task task)
