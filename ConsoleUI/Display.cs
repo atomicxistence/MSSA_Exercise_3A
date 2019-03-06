@@ -10,8 +10,9 @@ namespace ConsoleUI
 		private int currentWindowHeight;
 		private int centeredWindowTop;
 		private int centeredWindowLeft;
+		private int promptOffset = 3;
 		private int widthMin = 80;
-		private int heightMin = Global.PageSize + 3;
+		private int heightMin = Global.PageSize;
 		private int pageTopOffset;
 		private int pageLeftOffset = 2;
 		private int subMenuVerticalOffset = 1;
@@ -28,16 +29,18 @@ namespace ConsoleUI
 		private bool needSubMenuRefresh;
 
 		private ConsoleColor colorSubMenuBG = ConsoleColor.DarkGray;
-		private ConsoleColor colorSubMenuFG = ConsoleColor.Black;
+		private ConsoleColor colorSubMenuFG = ConsoleColor.White;
 		private ConsoleColor colorTitleBG = ConsoleColor.DarkGray;
 		private ConsoleColor colorTitleFG = ConsoleColor.Cyan;
 		private ConsoleColor colorPromptFG = ConsoleColor.Cyan;
-		private ConsoleColor colorPromptBG = ConsoleColor.Black;
+		private ConsoleColor colorPromptBG = ConsoleColor.DarkGray;
 		private ConsoleColor colorTaskActioned = ConsoleColor.DarkGray;
 		private ConsoleColor colorTaskSelectedBG = ConsoleColor.White;
-		private ConsoleColor colorTaskSelectedFG = ConsoleColor.Black;
-		private ConsoleColor colorDefaultFG = ConsoleColor.Red;
-		private ConsoleColor colorDefaultBG = ConsoleColor.Yellow;
+		private ConsoleColor colorTaskSelectedFG = ConsoleColor.DarkYellow;
+		private ConsoleColor colorTextEntryBG = ConsoleColor.White;
+		private ConsoleColor colorTextEntryFG = ConsoleColor.Black;
+		private ConsoleColor colorDefaultFG = ConsoleColor.Black;
+		private ConsoleColor colorDefaultBG = ConsoleColor.Gray;
 
 		private string selectionIndicator = " ► ";
 		private string[] title = new string[]
@@ -54,9 +57,9 @@ namespace ConsoleUI
 		public void Initialize(Page currentPage)
 		{
 			this.currentPage = currentPage;
-			heightMin += title.Length;
+			heightMin += title.Length + promptOffset;
 			SetInitialWindowSize();
-			pageTopOffset = centeredWindowTop + title.Length + 2;
+			pageTopOffset = centeredWindowTop + title.Length + promptOffset;
 			Console.CursorVisible = false;
 			currentSelection = new Selection(0, 0);
 			nextSelection = new Selection(0, 0);
@@ -133,6 +136,7 @@ namespace ConsoleUI
 			var entryFieldVerticalSize = 3;
 			var entryFieldLeftStart = (Console.WindowWidth / 2) - (entryFieldHorizontalSize / 2);
 			var entryFieldTopStart = (Console.WindowHeight / 2) - (entryFieldVerticalSize / 2);
+			var textEntryPrompt = "New Task: ";
 
 			Console.BackgroundColor = colorSubMenuBG;
 			Console.ForegroundColor = colorSubMenuFG;
@@ -145,7 +149,14 @@ namespace ConsoleUI
 
 			Console.SetCursorPosition(entryFieldLeftStart + subMenuLeftOffset, 
 									  entryFieldTopStart + (entryFieldVerticalSize / 2));
-			Console.Write("New Task: ");
+			Console.Write(textEntryPrompt);
+
+			// Print Text Entry Background
+			Console.ForegroundColor = colorTextEntryFG;
+			Console.BackgroundColor = colorTextEntryBG;
+			PrintEmptySpaceFill(entryFieldHorizontalSize - textEntryPrompt.Length - (subMenuLeftOffset * 2));
+			Console.SetCursorPosition(entryFieldLeftStart + subMenuLeftOffset + textEntryPrompt.Length + 1,
+									  entryFieldTopStart + (entryFieldVerticalSize / 2));
 		}
 
 		private void PrintSubMenuField(Menu subMenu, int subMenuLeftStart, int subMenuTopStart)
@@ -324,8 +335,24 @@ namespace ConsoleUI
 		{
 			Console.ForegroundColor = colorPromptFG;
 			Console.BackgroundColor = colorPromptBG;
-			Console.SetCursorPosition(centeredWindowLeft + ((widthMin / 2) - (prompt.Length / 2)), centeredWindowTop + title.Length);
+
+			// Print prompt background
+			for (int i = 0; i < promptOffset - 1; i++)
+			{
+				Console.SetCursorPosition(centeredWindowLeft, centeredWindowTop + title.Length + i);
+				PrintEmptySpaceFill(widthMin);
+			}
+
+			// Print prompt text
+			Console.SetCursorPosition(centeredWindowLeft + ((widthMin / 2) - (prompt.Length / 2)), 
+									  centeredWindowTop + title.Length);
 			Console.Write(prompt);
+
+			// Print background division before page contents
+			Console.ForegroundColor = colorDefaultFG;
+			Console.BackgroundColor = colorDefaultBG;
+			Console.SetCursorPosition(centeredWindowLeft, centeredWindowTop + title.Length + promptOffset - 1);
+			PrintEmptySpaceFill(widthMin);
 		}
 
 		private void PrintPageContents()
