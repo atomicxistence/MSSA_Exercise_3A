@@ -6,7 +6,7 @@ namespace ConsoleUI
 	{
 		public InputType Selection(SelectionType selectionType)
 		{
-			var input = Console.ReadKey(false);
+			var input = Console.ReadKey(true);
 
 			switch (selectionType)
 			{

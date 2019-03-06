@@ -57,6 +57,8 @@ namespace TaskTracker
 			{
 				taskList = new TaskList();
 				var page = new Page();
+				var task = new Task("Populate the task list with various tasks");
+				page.Tasks.Add(task);
 				taskList.Pages.Add(page);
 			}
 		}
