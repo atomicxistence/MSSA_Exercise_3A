@@ -103,51 +103,55 @@ namespace ConsoleUI
 		private void TaskSubMenu()
 		{
 			var taskMenuAction = InputType.Invalid;
-			var subSelection = new Selection(0, 0);
+			var subMenuSelection = new Selection(0, 0);
 			var taskSubMenu = new Menu(MenuType.TaskMenu);
 			var task = currentPage.Tasks[currentSelection.ItemIndex];
 
-			display.SubMenuCompleteRefresh(taskSubMenu, subSelection);
+			display.SubMenuCompleteRefresh(taskSubMenu, subMenuSelection);
 
 			while (true)
 			{
 				do
 				{
 					display.Refresh(currentPage, currentSelection);
-					display.SubMenuRefresh(taskSubMenu, subSelection);
+					display.SubMenuRefresh(taskSubMenu, subMenuSelection);
 					taskMenuAction = input.Selection(SelectionType.TaskActionSelection);
 				} while (taskMenuAction == InputType.Invalid);
 
 				switch (taskMenuAction)
 				{
 					case InputType.NextItem:
-						if (subSelection.ItemIndex == taskSubMenu.Items.Count - 1)
+						if (subMenuSelection.ItemIndex == taskSubMenu.Items.Count - 1)
 						{
-							subSelection = new Selection(0, 0);
+							subMenuSelection = new Selection(0, 0);
 						}
 						else
 						{
-							subSelection = new Selection(subSelection.ItemIndex + 1, 0);
+							subMenuSelection = new Selection(subMenuSelection.ItemIndex + 1, 0);
 						}
 						break;
 					case InputType.PreviousItem:
-						if (subSelection.ItemIndex == 0)
+						if (subMenuSelection.ItemIndex == 0)
 						{
-							subSelection = new Selection(taskSubMenu.Items.Count - 1, 0);
+							subMenuSelection = new Selection(taskSubMenu.Items.Count - 1, 0);
 						}
 						else
 						{
-							subSelection = new Selection(subSelection.ItemIndex - 1, 0);
+							subMenuSelection = new Selection(subMenuSelection.ItemIndex - 1, 0);
 						}
 						break;
 					case InputType.Select:
-						switch (taskSubMenu.Items[subSelection.ItemIndex].Action)
+						switch (taskSubMenu.Items[subMenuSelection.ItemIndex].Action)
 						{
 							case OptionType.ActionTask:
 								task.Actioned();
 								taskr.CopyTaskToEndOfList(task);
 								break;
 							case OptionType.CompleteTask:
+								if (!task.IsActioned)
+								{
+									task.Actioned();
+								}
 								task.Completed();
 								break;
 							case OptionType.Back:

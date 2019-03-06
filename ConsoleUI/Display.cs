@@ -14,12 +14,16 @@ namespace ConsoleUI
 		private int heightMin = Global.PageSize + 3;
 		private int pageTopOffset;
 		private int pageLeftOffset = 2;
+		private int subMenuVerticalOffset = 1;
+		private int subMenuLeftOffset = 3;
 
 		private string prompt = "▲ ▼ Tasks | ◄ ► Pages | N = New Task  | Esc = Quit";
 
 		private Selection currentSelection;
 		private Selection nextSelection;
 		private Page currentPage;
+		private Selection currentSubSelection;
+		private Selection nextSubSelection;
 
 		private ConsoleColor colorSubMenuBG = ConsoleColor.DarkGray;
 		private ConsoleColor colorSubMenuFG = ConsoleColor.Black;
@@ -51,6 +55,8 @@ namespace ConsoleUI
 			Console.CursorVisible = false;
 			currentSelection = new Selection(0, 0);
 			nextSelection = new Selection(0, 0);
+			currentSubSelection = new Selection(0, 0);
+			nextSubSelection = new Selection(0, 0);
 			CompleteRefresh();
 		}
 
@@ -58,6 +64,8 @@ namespace ConsoleUI
 		{
 			this.currentPage = currentPage;
 			this.nextSelection = nextSelection;
+
+			Console.CursorVisible = false;
 
 			if (WindowSizeHasChanged())
 			{
@@ -80,26 +88,97 @@ namespace ConsoleUI
 
 		public void SubMenuCompleteRefresh(Menu subMenu, Selection nextSubSelection)
 		{
+			this.nextSubSelection = nextSubSelection;
+			currentSubSelection = nextSubSelection;
 
+			var subMenuLeftStart = (centeredWindowLeft + (widthMin / 2)) / 2;
+			var subMenuTopStart = centeredWindowTop + (heightMin / 2);
+
+			PrintSubMenuField(subMenu, subMenuLeftStart, subMenuTopStart);
+			PrintSubMenuOptions(subMenu, subMenuLeftStart, subMenuTopStart);
+			PrintSubMenuSelections(subMenu);
+		}
+
+		private void PrintSubMenuField(Menu subMenu, int subMenuLeftStart, int subMenuTopStart)
+		{
+			Console.ForegroundColor = colorSubMenuFG;
+			Console.BackgroundColor = colorSubMenuBG;
+
+			for (int i = 0; i < subMenu.Items.Count + (subMenuVerticalOffset * 2); i++)
+			{
+				Console.SetCursorPosition(subMenuLeftStart, subMenuTopStart + i);
+				PrintEmptySpaceFill(widthMin / 2);
+			}
+		}
+
+		private void PrintSubMenuOptions(Menu subMenu, int subMenuLeftStart, int subMenuTopStart)
+		{
+			for (int i = 0; i < subMenu.Items.Count; i++)
+			{
+				Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
+										  subMenuTopStart + subMenuVerticalOffset + i);
+				Console.Write(subMenu.Items[i].Title);
+			}
+		}
+
+		private void PrintSubMenuSelections(Menu subMenu)
+		{
+			var subMenuLeftStart = (centeredWindowLeft + (widthMin / 2)) / 2;
+			var subMenuTopStart = centeredWindowTop + (heightMin / 2);
+
+			PrintSubMenuPreviousSelection(subMenu, subMenuLeftStart, subMenuTopStart);
+			PrintSubMenuNextSelection(subMenu, subMenuLeftStart, subMenuTopStart);
+		}
+
+		private void PrintSubMenuPreviousSelection(Menu subMenu, int subMenuLeftStart, int subMenuTopStart)
+		{
+			Console.ForegroundColor = colorSubMenuFG;
+			Console.BackgroundColor = colorSubMenuBG;
+
+			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
+												  subMenuTopStart + subMenuVerticalOffset + currentSubSelection.ItemIndex);
+			PrintEmptySpaceFill((widthMin / 2) - (subMenuLeftOffset * 2) + 1);
+
+			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
+									  subMenuTopStart + subMenuVerticalOffset + currentSubSelection.ItemIndex);
+			Console.Write(subMenu.Items[currentSubSelection.ItemIndex].Title);
+
+			Console.ResetColor();
+		}
+
+		private void PrintSubMenuNextSelection(Menu subMenu, int subMenuLeftStart, int subMenuTopStart)
+		{
+			Console.ForegroundColor = colorTaskSelectedFG;
+			Console.BackgroundColor = colorTaskSelectedBG;
+
+			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
+									  subMenuTopStart + subMenuVerticalOffset + nextSubSelection.ItemIndex);
+			PrintEmptySpaceFill((widthMin / 2) - (subMenuLeftOffset * 2));
+
+			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
+									  subMenuTopStart + subMenuVerticalOffset + nextSubSelection.ItemIndex);
+			Console.Write(selectionIndicator);
+			Console.Write(subMenu.Items[nextSubSelection.ItemIndex].Title);
+			PrintEmptySpaceFill((widthMin / 2) - (subMenuLeftOffset * 2) -
+								(subMenu.Items[nextSubSelection.ItemIndex].Title.Length +
+								 selectionIndicator.Length));
+			Console.ResetColor();
 		}
 
 		public void SubMenuRefresh(Menu subMenu, Selection nextSubSelection)
 		{
+			this.nextSubSelection = nextSubSelection;
+
 			if (WindowSizeHasChanged())
 			{
 				SubMenuCompleteRefresh(subMenu, nextSubSelection);
 			}
 
-			if (currentSelection.ItemIndex != this.nextSelection.ItemIndex)
+			if (currentSubSelection.ItemIndex != nextSubSelection.ItemIndex)
 			{
-				PrintSubSelections();
-				currentSelection = new Selection(this.nextSelection.ItemIndex, this.nextSelection.PageIndex);
+				PrintSubMenuSelections(subMenu);
+				currentSubSelection = new Selection(nextSubSelection.ItemIndex, 0);
 			}
-		}
-
-		private void PrintSubSelections()
-		{
-			//
 		}
 
 		public void NewTaskEntry()
@@ -148,10 +227,10 @@ namespace ConsoleUI
 		private void CompleteRefresh()
 		{
 			Console.Clear();
+			Console.CursorVisible = false;
 			SetCenteredWindowEdges();
 			PrintTitle();
 			PrintPrompt();
-			PrintBorder();
 			PrintPageContents();
 			PrintSelections();
 		}
@@ -163,7 +242,6 @@ namespace ConsoleUI
 
 			PrintCurrentSelection(currentTask);
 			PrintNextSelection(nextTask);
-
 		}
 
 
@@ -221,11 +299,6 @@ namespace ConsoleUI
 			Console.SetCursorPosition(centeredWindowLeft + ((widthMin / 2) - (prompt.Length / 2)), centeredWindowTop + title.Length);
 			Console.Write(prompt);
 			Console.ResetColor();
-		}
-
-		private void PrintBorder()
-		{
-			// is border needed?
 		}
 
 		private void PrintPageContents()
