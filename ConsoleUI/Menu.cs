@@ -8,6 +8,8 @@ namespace ConsoleUI
 
 		public Menu(MenuType type)
 		{
+			Items = new List<Option>();
+
 			switch (type)
 			{
 				case MenuType.TaskMenu:

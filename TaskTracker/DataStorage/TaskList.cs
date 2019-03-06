@@ -7,5 +7,10 @@ namespace TaskTracker
 	public class TaskList
     {
         public List<Page> Pages {get; private set;}
+
+		public TaskList()
+		{
+			Pages = new List<Page>();
+		}
     }
 }

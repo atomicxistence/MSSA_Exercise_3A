@@ -8,11 +8,13 @@ namespace ConsoleUI
 		private Taskr taskr = new Taskr();
 		private Display display = new Display();
 		private Input input = new Input();
-		private Selection currentSelection = new Selection(itemIndex: 0, pageIndex: 0);
+		private Selection currentSelection = new Selection(0, 0);
 		private Page currentPage;
 
 		public void Run()
 		{
+			display.Initialize(taskr.GetPage(currentSelection.PageIndex));
+
 			while (true)
 			{
 				currentPage = taskr.GetPage(currentSelection.PageIndex);
@@ -30,8 +32,8 @@ namespace ConsoleUI
 
 		private void ActionUserTaskListInput(InputType action)
 		{
-			int totalItems = taskr.GetPage(currentSelection.PageIndex).Tasks.Count;
-			int totalPages = taskr.GetTotalPageCount();
+			int totalItems = taskr.GetPage(currentSelection.PageIndex).Tasks.Count - 1;
+			int totalPages = taskr.GetTotalPageCount() - 1;
 
 			switch (action)
 			{
@@ -116,7 +118,7 @@ namespace ConsoleUI
 				switch (taskMenuAction)
 				{
 					case InputType.NextItem:
-						if (subSelection.ItemIndex == taskSubMenu.Items.Count)
+						if (subSelection.ItemIndex == taskSubMenu.Items.Count - 1)
 						{
 							subSelection = new Selection(0, 0);
 						}
@@ -128,7 +130,7 @@ namespace ConsoleUI
 					case InputType.PreviousItem:
 						if (subSelection.ItemIndex == 0)
 						{
-							subSelection = new Selection(taskSubMenu.Items.Count, 0);
+							subSelection = new Selection(taskSubMenu.Items.Count - 1, 0);
 						}
 						else
 						{
@@ -140,7 +142,7 @@ namespace ConsoleUI
 						{
 							case OptionType.ActionTask:
 								task.Actioned();
-								taskr.AddTask(task.Title);
+								taskr.CopyTaskToEndOfList(task);
 								break;
 							case OptionType.CompleteTask:
 								task.Completed();
@@ -178,7 +180,7 @@ namespace ConsoleUI
 				switch (quitMenuAction)
 				{
 					case InputType.NextItem:
-						if (subSelection.ItemIndex == quitMenu.Items.Count)
+						if (subSelection.ItemIndex == quitMenu.Items.Count - 1)
 						{
 							subSelection = new Selection(0, 0);
 						}
@@ -190,7 +192,7 @@ namespace ConsoleUI
 					case InputType.PreviousItem:
 						if (subSelection.ItemIndex == 0)
 						{
-							subSelection = new Selection(quitMenu.Items.Count, 0);
+							subSelection = new Selection(quitMenu.Items.Count - 1, 0);
 						}
 						else
 						{

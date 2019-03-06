@@ -14,5 +14,10 @@ namespace TaskTracker
 				return Tasks.Count >= Global.PageSize;
 			}
 		}
+
+		public Page()
+		{
+			Tasks = new List<Task>();
+		}
     }
 }

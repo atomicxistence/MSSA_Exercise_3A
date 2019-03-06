@@ -10,7 +10,7 @@ namespace TaskTracker
 
 		public Taskr()
 		{
-			fileManager = new XMLFileManager();
+			fileManager = new DummyFileManager();
 			LoadTaskList();
 		}
 
@@ -24,7 +24,16 @@ namespace TaskTracker
 		public void AddTask(string taskTitle)
 		{
 			var task = new Task(taskTitle);
+			InsertTaskOnLastPage(task);
+		}
 
+		public void CopyTaskToEndOfList(Task task)
+		{
+			InsertTaskOnLastPage(task);
+		} 
+
+		private void InsertTaskOnLastPage(Task task)
+		{
 			if (taskList.Pages[taskList.Pages.Count - 1].IsFull)
 			{
 				var newPage = new Page();
@@ -46,6 +55,8 @@ namespace TaskTracker
 			catch (FileNotFoundException)
 			{
 				taskList = new TaskList();
+				var page = new Page();
+				taskList.Pages.Add(page);
 			}
 		}
 
