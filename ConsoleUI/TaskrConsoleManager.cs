@@ -11,7 +11,7 @@ namespace ConsoleUI
 		private Selection currentSelection = new Selection(0, 0);
 		private Page currentPage;
 
-		private bool menuHasClosed;
+		private bool forceRefresh;
 
 		public void Run()
 		{
@@ -21,8 +21,8 @@ namespace ConsoleUI
 			while (true)
 			{
 				currentPage = taskr.GetPage(currentSelection.PageIndex);
-				display.Refresh(currentPage, currentSelection, menuHasClosed);
-				menuHasClosed = false;
+				display.Refresh(currentPage, currentSelection, forceRefresh);
+				forceRefresh = false;
 
 				InputType action = InputType.Invalid;
 				do
@@ -83,11 +83,11 @@ namespace ConsoleUI
 					break;
 				case InputType.Select:
 					TaskSubMenu();
-					menuHasClosed = true;
+					forceRefresh = true;
 					break;
 				case InputType.NewTask:
 					CreateNewTask();
-					menuHasClosed = true;
+					forceRefresh = true;
 					break;
 				case InputType.Quit:
 					if (QuitSubMenu())
@@ -97,7 +97,7 @@ namespace ConsoleUI
 					}
 					break;
 				case InputType.Back:
-					menuHasClosed = true;
+					forceRefresh = true;
 					break;
 				case InputType.Invalid:
 					break;
@@ -110,14 +110,15 @@ namespace ConsoleUI
 			var subMenuSelection = new Selection(0, 0);
 			var taskSubMenu = new Menu(MenuType.TaskMenu);
 			var task = currentPage.Tasks[currentSelection.ItemIndex];
+			bool isUsing = true;
 
 			display.SubMenuCompleteRefresh(taskSubMenu, subMenuSelection);
 
-			while (true)
+			while (isUsing)
 			{
 				do
 				{
-					display.Refresh(currentPage, currentSelection, menuHasClosed);
+					display.Refresh(currentPage, currentSelection, forceRefresh);
 					display.SubMenuRefresh(taskSubMenu, subMenuSelection);
 					taskMenuAction = input.Selection(SelectionType.TaskActionSelection);
 				} while (taskMenuAction == InputType.Invalid);
@@ -150,7 +151,8 @@ namespace ConsoleUI
 							case OptionType.ActionTask:
 								task.Actioned();
 								taskr.CopyTaskToEndOfList(task);
-								menuHasClosed = true;
+								forceRefresh = true;
+								isUsing = false;
 								break;
 							case OptionType.CompleteTask:
 								if (!task.IsActioned)
@@ -158,17 +160,20 @@ namespace ConsoleUI
 									task.Actioned();
 								}
 								task.Completed();
-								menuHasClosed = true;
+								forceRefresh = true;
+								isUsing = false;
 								break;
 							case OptionType.Back:
-								menuHasClosed = true;
+								forceRefresh = true;
+								isUsing = false;
 								break;
 							default:
 								break;
 						}
 						break;
 					case InputType.Back:
-						menuHasClosed = true;
+						forceRefresh = true;
+						isUsing = false;
 						break;
 					case InputType.Invalid:
 						break;
@@ -187,7 +192,7 @@ namespace ConsoleUI
 			{
 				do
 				{
-					display.Refresh(currentPage, currentSelection, menuHasClosed);
+					display.Refresh(currentPage, currentSelection, forceRefresh);
 					display.SubMenuRefresh(quitMenu, subSelection);
 					quitMenuAction = input.Selection(SelectionType.YesNoSubSelection);
 				} while (quitMenuAction == InputType.Invalid);
@@ -215,7 +220,7 @@ namespace ConsoleUI
 						}
 						break;
 					case InputType.Select:
-						menuHasClosed = true;
+						forceRefresh = true;
 						return quitMenu.Items[subSelection.ItemIndex].Action == OptionType.Yes;
 					case InputType.Invalid:
 						break;

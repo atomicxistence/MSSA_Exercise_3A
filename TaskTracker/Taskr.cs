@@ -10,7 +10,7 @@ namespace TaskTracker
 
 		public Taskr()
 		{
-			fileManager = new DummyFileManager();
+			fileManager = new XMLFileManager();
 			LoadTaskList();
 		}
 

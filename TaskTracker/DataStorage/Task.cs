@@ -10,6 +10,8 @@ namespace TaskTracker
         public bool IsActioned {get; private set;}
         public bool IsCompleted {get; private set;}
 
+		public Task() { }
+
         public Task(string title)
         {
             Title = title;
