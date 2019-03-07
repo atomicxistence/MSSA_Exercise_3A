@@ -96,8 +96,12 @@ namespace TaskrConsole
 					}
 					break;
 				case InputType.Select:
-					TaskSubMenu();
-					forceRefresh = true;
+					if (!currentPage.Tasks[currentSelection.ItemIndex].IsActioned ||
+						!currentPage.Tasks[currentSelection.ItemIndex].IsCompleted)
+					{
+						TaskSubMenu();
+						forceRefresh = true;
+					}
 					break;
 				case InputType.NewTask:
 					CreateNewTask();
