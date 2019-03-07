@@ -6,7 +6,7 @@ namespace TaskTracker
 {
 	public class XMLFileManager : IFileManager
 	{
-		private string savePath = AppDomain.CurrentDomain.BaseDirectory + "/Taskr.xml";
+		private string savePath = AppDomain.CurrentDomain.BaseDirectory + "Taskr.xml";
 
 		public TaskList Load()
 		{

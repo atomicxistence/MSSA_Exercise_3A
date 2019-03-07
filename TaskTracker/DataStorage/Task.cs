@@ -5,10 +5,10 @@ namespace TaskTracker
 	[Serializable]
 	public class Task
     {
-		public string Title {get; private set;}
-		public DateTime TimeStamp { get; private set; }
-        public bool IsActioned {get; private set;}
-        public bool IsCompleted {get; private set;}
+		public string Title {get; set;}
+		public DateTime TimeStamp { get; set; }
+        public bool IsActioned {get; set;}
+        public bool IsCompleted {get; set;}
 
 		public Task() { }
 
