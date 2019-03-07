@@ -64,21 +64,21 @@ namespace ConsoleUI
 				case InputType.NextPage:
 					if (currentSelection.PageIndex == totalPages)
 					{
-						currentSelection = new Selection(currentSelection.ItemIndex, 0);
+						currentSelection = new Selection(0, 0);
 					}
 					else
 					{
-						currentSelection = new Selection(currentSelection.ItemIndex, currentSelection.PageIndex + 1); ;
+						currentSelection = new Selection(0, currentSelection.PageIndex + 1); ;
 					}
 					break;
 				case InputType.PreviousPage:
 					if (currentSelection.PageIndex == 0)
 					{
-						currentSelection = new Selection(currentSelection.ItemIndex, totalPages);
+						currentSelection = new Selection(0, totalPages);
 					}
 					else
 					{
-						currentSelection = new Selection(currentSelection.ItemIndex, currentSelection.PageIndex - 1); ;
+						currentSelection = new Selection(0, currentSelection.PageIndex - 1); ;
 					}
 					break;
 				case InputType.Select:
