@@ -239,7 +239,10 @@ namespace ConsoleUI
 			Console.CursorVisible = true;
 			var input = Console.ReadLine();
 			Console.CursorVisible = false;
-			taskr.AddTask(input);
+			if (!string.IsNullOrWhiteSpace(input))
+			{
+				taskr.AddTask(input);
+			}
 		}
 	}
 }
