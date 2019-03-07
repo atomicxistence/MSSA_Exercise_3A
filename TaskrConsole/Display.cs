@@ -320,6 +320,11 @@ namespace TaskrConsole
 			Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset,
 									  centeredWindowTop + pageTopOffset + previousSelection.ItemIndex);
 			Console.Write(currentTask.Title);
+			// Print date created
+			string dateCreated = currentTask.TimeStamp.ToShortDateString();
+			Console.SetCursorPosition(centeredWindowLeft + widthMin - pageLeftOffset - dateCreated.Length,
+									  centeredWindowTop + pageTopOffset + previousSelection.ItemIndex);
+			Console.Write(dateCreated);
 		}
 
 		private void PrintNextSelection(Task nextTask)
@@ -331,6 +336,11 @@ namespace TaskrConsole
 			Console.Write(selectionIndicator);
 			Console.Write(nextTask.Title);
 			PrintEmptySpaceFill(widthMin - nextTask.Title.Length - selectionIndicator.Length);
+			// Print date created
+			string dateCreated = nextTask.TimeStamp.ToShortDateString();
+			Console.SetCursorPosition(centeredWindowLeft + widthMin - pageLeftOffset - dateCreated.Length,
+									  centeredWindowTop + pageTopOffset + nextSelection.ItemIndex);
+			Console.Write(dateCreated);
 		}
 
 		private void PrintTitle()
@@ -395,6 +405,11 @@ namespace TaskrConsole
 										  centeredWindowTop + pageTopOffset + i);
 				Console.ForegroundColor = currentPage.Tasks[i].IsActioned ? colorTaskActioned : colorDefaultFG;
 				Console.Write(currentPage.Tasks[i].Title);
+				// Print date created
+				string dateCreated = currentPage.Tasks[i].TimeStamp.ToShortDateString();
+				Console.SetCursorPosition(centeredWindowLeft + widthMin - pageLeftOffset - dateCreated.Length,
+										  centeredWindowTop + pageTopOffset + i);
+				Console.Write(dateCreated);
 			}
 		}
 
