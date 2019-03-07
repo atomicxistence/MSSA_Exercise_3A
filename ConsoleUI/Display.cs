@@ -17,8 +17,10 @@ namespace ConsoleUI
 		private int pageLeftOffset = 2;
 		private int subMenuVerticalOffset = 1;
 		private int subMenuLeftOffset = 3;
+		private int subMenuPromptOffset = 2;
 
 		private string prompt = "▲ ▼ Tasks | ◄ ► Pages | N = New Task  | Esc = Quit";
+		private string subMenuPrompt;
 
 		private Selection currentSelection;
 		private Selection nextSelection;
@@ -28,6 +30,7 @@ namespace ConsoleUI
 
 		private bool needSubMenuRefresh;
 
+		#region Colors
 		private ConsoleColor colorSubMenuBG = ConsoleColor.DarkGray;
 		private ConsoleColor colorSubMenuFG = ConsoleColor.White;
 		private ConsoleColor colorTitleBG = ConsoleColor.DarkGray;
@@ -41,6 +44,7 @@ namespace ConsoleUI
 		private ConsoleColor colorTextEntryFG = ConsoleColor.Black;
 		private ConsoleColor colorDefaultFG = ConsoleColor.Black;
 		private ConsoleColor colorDefaultBG = ConsoleColor.Gray;
+		#endregion
 
 		private string selectionIndicator = " ► ";
 		private string[] title = new string[]
@@ -100,10 +104,12 @@ namespace ConsoleUI
 			}
 		}
 
-		public void SubMenuCompleteRefresh(Menu subMenu, Selection nextSubSelection)
+		public void SubMenuCompleteRefresh(Menu subMenu, Selection nextSubSelection, string subMenuPrompt)
 		{
 			this.nextSubSelection = nextSubSelection;
 			currentSubSelection = nextSubSelection;
+
+			this.subMenuPrompt = subMenuPrompt;
 
 			var subMenuHorizontalSize = widthMin / 2;
 			var subMenuLeftStart = (Console.WindowWidth / 2)  - (subMenuHorizontalSize / 2);
@@ -120,7 +126,7 @@ namespace ConsoleUI
 
 			if (needSubMenuRefresh)
 			{
-				SubMenuCompleteRefresh(subMenu, nextSubSelection);
+				SubMenuCompleteRefresh(subMenu, nextSubSelection, subMenuPrompt);
 			}
 
 			if (currentSubSelection.ItemIndex != nextSubSelection.ItemIndex)
@@ -159,12 +165,14 @@ namespace ConsoleUI
 									  entryFieldTopStart + (entryFieldVerticalSize / 2));
 		}
 
+		//-----------------------------------------------------------------------------------------
+
 		private void PrintSubMenuField(Menu subMenu, int subMenuLeftStart, int subMenuTopStart)
 		{
 			Console.ForegroundColor = colorSubMenuFG;
 			Console.BackgroundColor = colorSubMenuBG;
 
-			for (int i = 0; i < subMenu.Items.Count + (subMenuVerticalOffset * 2); i++)
+			for (int i = 0; i < subMenu.Items.Count + (subMenuVerticalOffset * 2) + subMenuPromptOffset; i++)
 			{
 				Console.SetCursorPosition(subMenuLeftStart, subMenuTopStart + i);
 				PrintEmptySpaceFill(widthMin / 2);
@@ -176,10 +184,14 @@ namespace ConsoleUI
 			Console.ForegroundColor = colorSubMenuFG;
 			Console.BackgroundColor = colorSubMenuBG;
 
+			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
+										  subMenuTopStart + subMenuVerticalOffset);
+			Console.Write(subMenuPrompt);
+
 			for (int i = 0; i < subMenu.Items.Count; i++)
 			{
 				Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
-										  subMenuTopStart + subMenuVerticalOffset + i);
+										  subMenuTopStart + subMenuVerticalOffset + subMenuPromptOffset + i);
 				Console.Write(subMenu.Items[i].Title);
 			}
 		}
@@ -200,11 +212,11 @@ namespace ConsoleUI
 			Console.BackgroundColor = colorSubMenuBG;
 
 			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
-												  subMenuTopStart + subMenuVerticalOffset + currentSubSelection.ItemIndex);
+												  subMenuTopStart + subMenuVerticalOffset + currentSubSelection.ItemIndex + subMenuPromptOffset);
 			PrintEmptySpaceFill((widthMin / 2) - (subMenuLeftOffset * 2) + 1);
 
 			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
-									  subMenuTopStart + subMenuVerticalOffset + currentSubSelection.ItemIndex);
+									  subMenuTopStart + subMenuVerticalOffset + currentSubSelection.ItemIndex + subMenuPromptOffset);
 			Console.Write(subMenu.Items[currentSubSelection.ItemIndex].Title);
 		}
 
@@ -214,11 +226,11 @@ namespace ConsoleUI
 			Console.BackgroundColor = colorTaskSelectedBG;
 
 			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
-									  subMenuTopStart + subMenuVerticalOffset + nextSubSelection.ItemIndex);
+									  subMenuTopStart + subMenuVerticalOffset + nextSubSelection.ItemIndex + subMenuPromptOffset);
 			PrintEmptySpaceFill((widthMin / 2) - (subMenuLeftOffset * 2));
 
 			Console.SetCursorPosition(subMenuLeftStart + subMenuLeftOffset,
-									  subMenuTopStart + subMenuVerticalOffset + nextSubSelection.ItemIndex);
+									  subMenuTopStart + subMenuVerticalOffset + nextSubSelection.ItemIndex + subMenuPromptOffset);
 			Console.Write(selectionIndicator);
 			Console.Write(subMenu.Items[nextSubSelection.ItemIndex].Title);
 			PrintEmptySpaceFill((widthMin / 2) - (subMenuLeftOffset * 2) -

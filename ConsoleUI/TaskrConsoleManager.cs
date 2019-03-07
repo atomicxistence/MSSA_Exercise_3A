@@ -110,9 +110,10 @@ namespace ConsoleUI
 			var subMenuSelection = new Selection(0, 0);
 			var taskSubMenu = new Menu(MenuType.TaskMenu);
 			var task = currentPage.Tasks[currentSelection.ItemIndex];
+			var taskPrompt = "Select an option...";
 			bool isUsing = true;
 
-			display.SubMenuCompleteRefresh(taskSubMenu, subMenuSelection);
+			display.SubMenuCompleteRefresh(taskSubMenu, subMenuSelection, taskPrompt);
 
 			while (isUsing)
 			{
@@ -185,43 +186,46 @@ namespace ConsoleUI
 		private bool QuitSubMenu()
 		{
 			var quitMenuAction = InputType.Invalid;
-			var subSelection = new Selection(0, 0);
+			var quitSelection = new Selection(0, 0);
 			var quitMenu = new Menu(MenuType.YesNoMenu);
+			var quitPrompt = "Are you sure you want to quit?";
+
+			display.SubMenuCompleteRefresh(quitMenu, quitSelection, quitPrompt);
 
 			while (true)
 			{
 				do
 				{
 					display.Refresh(currentPage, currentSelection, forceRefresh);
-					display.SubMenuRefresh(quitMenu, subSelection);
+					display.SubMenuRefresh(quitMenu, quitSelection);
 					quitMenuAction = input.Selection(SelectionType.YesNoSubSelection);
 				} while (quitMenuAction == InputType.Invalid);
 
 				switch (quitMenuAction)
 				{
 					case InputType.NextItem:
-						if (subSelection.ItemIndex == quitMenu.Items.Count - 1)
+						if (quitSelection.ItemIndex == quitMenu.Items.Count - 1)
 						{
-							subSelection = new Selection(0, 0);
+							quitSelection = new Selection(0, 0);
 						}
 						else
 						{
-							subSelection = new Selection(subSelection.ItemIndex + 1, 0);
+							quitSelection = new Selection(quitSelection.ItemIndex + 1, 0);
 						}
 						break;
 					case InputType.PreviousItem:
-						if (subSelection.ItemIndex == 0)
+						if (quitSelection.ItemIndex == 0)
 						{
-							subSelection = new Selection(quitMenu.Items.Count - 1, 0);
+							quitSelection = new Selection(quitMenu.Items.Count - 1, 0);
 						}
 						else
 						{
-							subSelection = new Selection(subSelection.ItemIndex - 1, 0);
+							quitSelection = new Selection(quitSelection.ItemIndex - 1, 0);
 						}
 						break;
 					case InputType.Select:
 						forceRefresh = true;
-						return quitMenu.Items[subSelection.ItemIndex].Action == OptionType.Yes;
+						return quitMenu.Items[quitSelection.ItemIndex].Action == OptionType.Yes;
 					case InputType.Invalid:
 						break;
 				}
