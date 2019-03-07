@@ -1,7 +1,7 @@
 ﻿using System;
-using TaskTracker;
+using TaskrLibrary;
 
-namespace ConsoleUI
+namespace TaskrConsole
 {
 	public class Display
 	{

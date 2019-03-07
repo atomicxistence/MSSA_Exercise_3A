@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleUI
+namespace TaskrConsole
 {
 	public class Input
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleUI
+namespace TaskrConsole
 {
 	public class Menu
 	{

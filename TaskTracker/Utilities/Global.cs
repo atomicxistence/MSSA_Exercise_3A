@@ -1,4 +1,4 @@
-﻿namespace TaskTracker
+﻿namespace TaskrLibrary
 {
 	public static class Global
 	{

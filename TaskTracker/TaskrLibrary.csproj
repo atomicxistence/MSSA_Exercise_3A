@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>TaskrLibrary</AssemblyName>
+    <RootNamespace>Taskr</RootNamespace>
   </PropertyGroup>
 
 </Project>

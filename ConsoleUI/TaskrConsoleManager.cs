@@ -1,7 +1,7 @@
 ﻿using System;
-using TaskTracker;
+using TaskrLibrary;
 
-namespace ConsoleUI
+namespace TaskrConsole
 {
 	public class TaskrConsoleManager
 	{
@@ -20,7 +20,13 @@ namespace ConsoleUI
 
 			while (true)
 			{
-				currentPage = taskr.GetPage(currentSelection.PageIndex);
+				var nextPage = taskr.GetPage(currentSelection.PageIndex);
+				if (currentPage != nextPage)
+				{
+					currentSelection = new Selection(0, 0);
+					currentPage = nextPage;
+				}
+
 				display.Refresh(currentPage, currentSelection, forceRefresh);
 				forceRefresh = false;
 

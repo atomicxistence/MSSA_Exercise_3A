@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CF8A7FE5-A6E3-495D-A640-E5FF4177B5EC}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleUI</RootNamespace>
-    <AssemblyName>ConsoleUI</AssemblyName>
+    <RootNamespace>Taskr.Console</RootNamespace>
+    <AssemblyName>TaskrConsole</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -56,9 +56,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TaskTracker\TaskTracker.csproj">
+    <ProjectReference Include="..\TaskTracker\TaskrLibrary.csproj">
       <Project>{52A101CB-E975-4AE6-949F-366175E8DDC8}</Project>
-      <Name>TaskTracker</Name>
+      <Name>TaskrLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

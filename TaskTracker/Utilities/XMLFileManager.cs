@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace TaskTracker
+namespace TaskrLibrary
 {
 	public class XMLFileManager : IFileManager
 	{

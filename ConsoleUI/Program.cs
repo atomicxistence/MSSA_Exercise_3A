@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsoleUI
+namespace TaskrConsole
 {
 	class Program
 	{

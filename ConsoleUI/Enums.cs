@@ -1,4 +1,4 @@
-﻿namespace ConsoleUI
+﻿namespace TaskrConsole
 {
 	public enum MenuType
 	{

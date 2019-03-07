@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaskTracker
+namespace TaskrLibrary
 {
 	public class DummyFileManager : IFileManager
 	{
