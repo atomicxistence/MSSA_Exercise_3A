@@ -22,13 +22,14 @@ namespace TaskrConsole
 		private string prompt = "▲ ▼ Tasks | ◄ ► Pages | N = New Task  | Esc = Quit";
 		private string subMenuPrompt;
 
-		private Selection currentSelection;
+		private Selection previousSelection;
 		private Selection nextSelection;
 		private Page currentPage;
 		private Selection currentSubSelection;
 		private Selection nextSubSelection;
 
 		private bool needSubMenuRefresh;
+		private bool pageHasChanged;
 
 		#region Colors
 		private ConsoleColor colorSubMenuBG = ConsoleColor.DarkGray;
@@ -65,7 +66,7 @@ namespace TaskrConsole
 			SetInitialWindowSize();
 			pageTopOffset = centeredWindowTop + title.Length + promptOffset;
 			Console.CursorVisible = false;
-			currentSelection = new Selection(0, 0);
+			previousSelection = new Selection(0, 0);
 			nextSelection = new Selection(0, 0);
 			currentSubSelection = new Selection(0, 0);
 			nextSubSelection = new Selection(0, 0);
@@ -74,6 +75,7 @@ namespace TaskrConsole
 
 		public void Refresh(Page currentPage, Selection nextSelection, bool forceRefresh)
 		{
+			pageHasChanged = this.currentPage != currentPage;
 			this.currentPage = currentPage;
 			this.nextSelection = nextSelection;
 
@@ -84,17 +86,17 @@ namespace TaskrConsole
 				CompleteRefresh();
 			}
 
-			if (currentSelection.ItemIndex != nextSelection.ItemIndex)
-			{
-				PrintSelections();
-				currentSelection = new Selection(nextSelection.ItemIndex, nextSelection.PageIndex);
-			}
-
-			if (currentSelection.PageIndex != nextSelection.PageIndex)
+			if (previousSelection.PageIndex != nextSelection.PageIndex)
 			{
 				PrintPageContents();
 				PrintSelections();
-				currentSelection = new Selection(nextSelection.ItemIndex, nextSelection.PageIndex);
+				previousSelection = new Selection(nextSelection.ItemIndex, nextSelection.PageIndex);
+			}
+
+			if (previousSelection.ItemIndex != nextSelection.ItemIndex)
+			{
+				PrintSelections();
+				previousSelection = new Selection(nextSelection.ItemIndex, nextSelection.PageIndex);
 			}
 
 			if (forceRefresh)
@@ -291,24 +293,32 @@ namespace TaskrConsole
 
 		private void PrintSelections()
 		{
-			var currentTask = currentPage.Tasks[currentSelection.ItemIndex];
-			var nextTask = currentPage.Tasks[nextSelection.ItemIndex];
+			Task previousTask;
+			if (pageHasChanged)
+			{
+				previousTask = currentPage.Tasks[0];
+			}
+			else
+			{
+				previousTask = currentPage.Tasks[previousSelection.ItemIndex];
+				PrintPreviousSelection(previousTask);
+			}
 
-			PrintCurrentSelection(currentTask);
+			var nextTask = currentPage.Tasks[nextSelection.ItemIndex];
 			PrintNextSelection(nextTask);
 		}
 
-		private void PrintCurrentSelection(Task currentTask)
+		private void PrintPreviousSelection(Task currentTask)
 		{
 			Console.ForegroundColor = currentTask.IsActioned ? colorTaskActioned : colorDefaultFG;
 			Console.BackgroundColor = colorDefaultBG;
 
 			Console.SetCursorPosition(centeredWindowLeft,
-									  centeredWindowTop + pageTopOffset + currentSelection.ItemIndex);
+									  centeredWindowTop + pageTopOffset + previousSelection.ItemIndex);
 			PrintEmptySpaceFill(widthMin);
-		
+			
 			Console.SetCursorPosition(centeredWindowLeft + pageLeftOffset,
-									  centeredWindowTop + pageTopOffset + currentSelection.ItemIndex);
+									  centeredWindowTop + pageTopOffset + previousSelection.ItemIndex);
 			Console.Write(currentTask.Title);
 		}
 

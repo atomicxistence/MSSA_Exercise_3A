@@ -44,7 +44,14 @@ namespace TaskrConsole
 				case InputType.NextItem:
 					if (currentSelection.ItemIndex == totalItems)
 					{
-						currentSelection = new Selection(0, currentSelection.PageIndex);
+						if (currentSelection.PageIndex == totalPages)
+						{
+							currentSelection = new Selection(0, 0);
+						}
+						else
+						{
+							currentSelection = new Selection(0, currentSelection.PageIndex + 1);
+						}
 					}
 					else
 					{
@@ -54,7 +61,14 @@ namespace TaskrConsole
 				case InputType.PreviousItem:
 					if (currentSelection.ItemIndex == 0)
 					{
-						currentSelection = new Selection(totalItems, currentSelection.PageIndex);
+						if (currentSelection.PageIndex == 0)
+						{
+							currentSelection = new Selection(taskr.GetPage(totalPages).Tasks.Count - 1, totalPages);
+						}
+						else
+						{
+							currentSelection = new Selection(taskr.GetPage(currentSelection.PageIndex - 1).Tasks.Count - 1, currentSelection.PageIndex - 1);
+						}
 					}
 					else
 					{
