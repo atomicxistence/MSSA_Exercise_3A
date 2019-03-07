@@ -20,13 +20,7 @@ namespace TaskrConsole
 
 			while (true)
 			{
-				var nextPage = taskr.GetPage(currentSelection.PageIndex);
-				if (currentPage != nextPage)
-				{
-					currentSelection = new Selection(0, 0);
-					currentPage = nextPage;
-				}
-
+				currentPage = taskr.GetPage(currentSelection.PageIndex);
 				display.Refresh(currentPage, currentSelection, forceRefresh);
 				forceRefresh = false;
 
@@ -158,6 +152,11 @@ namespace TaskrConsole
 							case OptionType.ActionTask:
 								task.Actioned();
 								taskr.CopyTaskToEndOfList(task);
+								if (taskr.RemoveCompletelyActionedPages(currentPage))
+								{
+									int adjustedPageIndex = currentSelection.PageIndex == 0 ? 0 : currentSelection.PageIndex - 1;
+									currentSelection = new Selection(0, adjustedPageIndex);
+								}
 								forceRefresh = true;
 								isUsing = false;
 								break;
@@ -167,6 +166,11 @@ namespace TaskrConsole
 									task.Actioned();
 								}
 								task.Completed();
+								if (taskr.RemoveCompletelyActionedPages(currentPage))
+								{
+									int adjustedPageIndex = currentSelection.PageIndex == 0 ? 0 : currentSelection.PageIndex - 1;
+									currentSelection = new Selection(0, adjustedPageIndex);
+								}
 								forceRefresh = true;
 								isUsing = false;
 								break;

@@ -56,8 +56,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TaskTracker\TaskrLibrary.csproj">
-      <Project>{52A101CB-E975-4AE6-949F-366175E8DDC8}</Project>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TaskrLibrary\TaskrLibrary.csproj">
+      <Project>{88cf542b-780a-4c88-b19a-d51bfc39b193}</Project>
       <Name>TaskrLibrary</Name>
     </ProjectReference>
   </ItemGroup>

@@ -32,6 +32,19 @@ namespace TaskrLibrary
 			InsertTaskOnLastPage(newTask);
 		} 
 
+		public bool RemoveCompletelyActionedPages(Page page)
+		{
+			if(page.IsFull && page.IsFullyActioned)
+			{
+				taskList.Pages.Remove(page);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		private void InsertTaskOnLastPage(Task task)
 		{
 			if (taskList.Pages[taskList.Pages.Count - 1].IsFull)
