@@ -176,6 +176,7 @@ namespace TaskrConsole
 								}
 								forceRefresh = true;
 								isUsing = false;
+								taskr.SaveTaskList();
 								break;
 							case OptionType.CompleteTask:
 								if (!task.IsActioned)
@@ -190,6 +191,7 @@ namespace TaskrConsole
 								}
 								forceRefresh = true;
 								isUsing = false;
+								taskr.SaveTaskList();
 								break;
 							case OptionType.Back:
 								forceRefresh = true;
@@ -269,6 +271,7 @@ namespace TaskrConsole
 			if (!string.IsNullOrWhiteSpace(input))
 			{
 				taskr.AddTask(input);
+				taskr.SaveTaskList();
 			}
 		}
 	}
