@@ -1,5 +1,6 @@
 # Taskr
 > Long Task List Console Application
+
 ![Application Demo](https://github.com/atomicxistence/MSSA_Exercise_3A/blob/master/SupportingDocuments/ApplicationDemo.gif)
 
 This console application is a task tracking system using the [Simple Scanning](http://markforster.squarespace.com/blog/2017/12/2/simple-scanning-the-rules.html) technique by Mark Forster. The requirements for designing this app given by the instructor can be found [here](https://github.com/atomicxistence/MSSA_Exercise_3A/blob/master/SupportingDocuments/ApplicationRequirements.md).
