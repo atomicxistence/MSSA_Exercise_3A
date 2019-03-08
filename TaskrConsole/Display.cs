@@ -12,7 +12,7 @@ namespace TaskrConsole
 		private int centeredWindowLeft;
 		private int promptOffset = 3;
 		private int widthMin = 80;
-		private int heightMin = Global.PageSize;
+		private int heightMin = Global.PageSize + 1;
 		private int pageTopOffset;
 		private int pageLeftOffset = 2;
 		private int subMenuVerticalOffset = 1;
@@ -392,7 +392,7 @@ namespace TaskrConsole
 			Console.ForegroundColor = colorDefaultFG;
 			Console.BackgroundColor = colorDefaultBG;
 			// Print page background
-			for (int i = 0; i < Global.PageSize; i++)
+			for (int i = 0; i < Global.PageSize + 1; i++)
 			{
 				Console.SetCursorPosition(centeredWindowLeft, centeredWindowTop + pageTopOffset + i);
 				PrintEmptySpaceFill(widthMin);
