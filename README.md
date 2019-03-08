@@ -11,7 +11,7 @@ This project is still in alpha and has no API support.
 
 ---
 ### **Design**
-I used lessons learned from my previous GUI-lite console implementations and built the GUI for this project from the ground up. I plan to abstract the GUI code from this project as a seperate library.
+I used lessons learned from my previous GUI-lite console implementations and built the GUI for this project from the ground up. I plan to abstract the GUI code from this project as a seperate library for future use.
 
 Using the SOLID design principles, I created a library for the data containers and the logic to manipulate the data. Trying to seperate the console UI from logic as much as possible.
 
