@@ -263,7 +263,7 @@ namespace TaskrConsole
 			{
 				hasChanged = true;
 				Console.Clear();
-				Console.WriteLine($"Please adjust your window size to at least 80 by {heightMin}. Press any key to continue.");
+				Console.WriteLine($"Please adjust your window size to at least {widthMin} by {heightMin}. Press any key to continue.");
 				Console.ReadKey();
 			}
 
