@@ -1,5 +1,5 @@
 # Taskr
-> Long Task List Console Application
+> MSSA Exercise 3A: Long Task List Console Application
 
 ![Application Demo](https://github.com/atomicxistence/MSSA_Exercise_3A/blob/master/SupportingDocuments/ApplicationDemo.gif)
 
