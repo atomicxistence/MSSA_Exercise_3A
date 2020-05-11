@@ -1,6 +1,6 @@
 using System;
 
-namespace TaskrLibrary
+namespace TaskrLibrary.Models
 {
 	[Serializable]
 	public class Task

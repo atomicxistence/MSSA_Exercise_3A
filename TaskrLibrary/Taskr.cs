@@ -1,53 +1,30 @@
-﻿using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using TaskrLibrary.Models;
 
 namespace TaskrLibrary
 {
-	public class Taskr
-	{
-		private TaskList taskList;
+    public class NewTaskr
+    {
+        private TaskList taskList;
 		private IFileManager fileManager;
 
-		public Taskr()
-		{
-			fileManager = new XMLFileManager();
+        public NewTaskr()
+        {
+            fileManager = new XMLFileManager();
 			LoadTaskList();
-		}
+        }
 
-		public Page GetPage(int pageIndex)
+        public void AddTask(string description)
+        {
+
+        }
+
+        private void InsertTaskOnLastPage(Task task)
 		{
-			return taskList.Pages[pageIndex];
-		}
-
-		public int GetTotalPageCount() => taskList.Pages.Count;
-
-		public void AddTask(string taskTitle)
-		{
-			var task = new Task(taskTitle);
-			InsertTaskOnLastPage(task);
-		}
-
-		public void CopyTaskToEndOfList(Task task)
-		{
-			var newTask = new Task(task.Title, task.TimeStamp);
-			InsertTaskOnLastPage(newTask);
-		} 
-
-		public bool RemoveCompletelyActionedPages(Page page)
-		{
-			if(page.IsFull && page.IsFullyActioned)
-			{
-				taskList.Pages.Remove(page);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		private void InsertTaskOnLastPage(Task task)
-		{
-			if (taskList.Pages[taskList.Pages.Count - 1].IsFull)
+			if (taskList.Pages.Last().IsFull)
 			{
 				var newPage = new Page();
 				newPage.Tasks.Add(task);
@@ -55,11 +32,11 @@ namespace TaskrLibrary
 			}
 			else
 			{
-				taskList.Pages[taskList.Pages.Count - 1].Tasks.Add(task);
+				taskList.Pages.Last().Tasks.Add(task);
 			}
 		}
 
-		private void LoadTaskList()
+        private void LoadTaskList()
 		{
 			try
 			{
@@ -68,16 +45,12 @@ namespace TaskrLibrary
 			catch (FileNotFoundException)
 			{
 				taskList = new TaskList();
-				var page = new Page();
-				var task = new Task("Populate the task list with various tasks");
-				page.Tasks.Add(task);
-				taskList.Pages.Add(page);
 			}
 		}
 
-		public void SaveTaskList()
-		{
-			fileManager.Save(taskList);
-		}
-	}
+        private void SaveTaskList()
+        {
+            fileManager.Save(taskList);
+        }
+    }
 }

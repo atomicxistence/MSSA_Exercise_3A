@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace TaskrLibrary
+namespace TaskrLibrary.Models
 {
-	[Serializable]
 	public class TaskList
     {
         public List<Page> Pages {get; private set;}
