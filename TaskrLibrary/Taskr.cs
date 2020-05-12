@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using TaskrLibrary.Models;
 using TaskrLibrary.FileIO;
 
@@ -9,7 +8,7 @@ namespace TaskrLibrary
 {
     public class NewTaskr
     {
-		public static int PageSize => 25;
+		public int PageSize => 25;
 
 		private int pageNumber = 1;
         private List<Page> Pages { get; set;}
@@ -70,7 +69,7 @@ namespace TaskrLibrary
             {
                 return new List<Page>()
                 {
-                    new Page()
+                    new Page(PageSize)
                 };
             }
 
