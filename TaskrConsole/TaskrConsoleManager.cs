@@ -1,5 +1,6 @@
 ﻿using System;
 using TaskrLibrary;
+using TaskrLibrary.Models;
 
 namespace TaskrConsole
 {

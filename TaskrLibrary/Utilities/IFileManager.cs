@@ -1,9 +1,12 @@
-﻿namespace TaskrLibrary
+﻿using System.Collections.Generic;
+using TaskrLibrary.Models;
+
+namespace TaskrLibrary
 {
 	interface IFileManager
 	{
-		TaskList Load();
+		List<Page> Load();
 
-		void Save(TaskList taskList);
+		void Save(List<Page> pages);
 	}
 }
