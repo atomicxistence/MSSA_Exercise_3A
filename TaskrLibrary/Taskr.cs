@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using TaskrLibrary.Models;
+using TaskrLibrary.FileIO;
 
 namespace TaskrLibrary
 {
     public class NewTaskr
     {
+		public static int PageSize => 25;
+
 		private int pageNumber = 1;
         private List<Page> Pages { get; set;}
 		public Page CurrentPage => Pages[pageNumber - 1];
 		public Page NextPage => ChangePage(1);
 		public Page PreviousPage => ChangePage(-1);
+		private readonly IFileTransaction file;
 
-		public static int PageSize => 25;
-
-        public NewTaskr()
+        public NewTaskr(IFileTransaction file)
         {
+			this.file = file;
 			Pages = IntializePages();
         }
 
@@ -31,7 +34,7 @@ namespace TaskrLibrary
 				IsActioned = false,
 				IsCompleted = false
 			};
-			//TODO: save to db and return task with id
+			task = file.InsertTask(task);
 			InsertTaskOnLastPage(task);
 			return CurrentPage;
         }
@@ -45,31 +48,50 @@ namespace TaskrLibrary
 				IsActioned = false,
 				IsCompleted = false
 			};
-			//TODO: insert new task to db and return task with id
+			newTask = file.InsertTask(newTask);
 			InsertTaskOnLastPage(newTask);
 
 			task.IsActioned = true;
-			//TODO: update task status in db
+			file.UpdateTask(task);
 			return CurrentPage;
 		}
 
 		public Page CompleteTask(Task task)
 		{
 			task.IsCompleted = true;
-			//TODO: update task status in db
+			file.UpdateTask(task);
 			return CurrentPage;
 		}
 
         private List<Page> IntializePages()
         {
-            //TODO: try to load from database
-			return new List<Page>()
-			{
-				new Page()
-			};
+            var tasks = file.Load();
+            if (tasks == null)
+            {
+                return new List<Page>()
+                {
+                    new Page()
+                };
+            }
+
+            return CreatePagesOfTasks(tasks);
         }
 
-		private Page ChangePage(int amount)
+        private List<Page> CreatePagesOfTasks(List<Task> tasks)
+        {
+            var pages = new List<Page>();
+            var relevantTasks = tasks.SkipWhile(x => x.IsActioned);
+            for (int i = 0; i < relevantTasks.Count() % PageSize; i++)
+            {
+                var page = new Page();
+                page.Tasks.AddRange(relevantTasks.Skip(i * PageSize).Take(PageSize));
+                pages.Add(page);
+            }
+
+            return pages;
+        }
+
+        private Page ChangePage(int amount)
 		{
 			pageNumber = (pageNumber + amount) % Pages.Count();
 			return CurrentPage;
