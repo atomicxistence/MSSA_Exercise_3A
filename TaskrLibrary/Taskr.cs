@@ -6,23 +6,22 @@ using TaskrLibrary.FileIO;
 
 namespace TaskrLibrary
 {
-    public class NewTaskr
+    public class Taskr
     {
-		public int PageSize => 25;
-
+		private readonly IFileTransaction file;
 		private int pageNumber = 1;
         private List<Page> Pages { get; set;}
+
+		public int PageSize => 25;
 		public Page CurrentPage => Pages[pageNumber - 1];
 		public Page NextPage => ChangePage(1);
 		public Page PreviousPage => ChangePage(-1);
-		private readonly IFileTransaction file;
 
-        public NewTaskr(IFileTransaction file)
+        public Taskr(IFileTransaction file)
         {
 			this.file = file;
 			Pages = IntializePages();
         }
-
 
         public Page CreateTask(string description)
         {
@@ -52,6 +51,12 @@ namespace TaskrLibrary
 
 			task.IsActioned = true;
 			file.UpdateTask(task);
+
+			if (CurrentPage.IsFullyActioned)
+			{
+				Pages.Remove(CurrentPage);
+			}
+
 			return CurrentPage;
 		}
 
@@ -59,6 +64,12 @@ namespace TaskrLibrary
 		{
 			task.IsCompleted = true;
 			file.UpdateTask(task);
+
+			if (CurrentPage.IsFullyActioned)
+			{
+				Pages.Remove(CurrentPage);
+			}
+			
 			return CurrentPage;
 		}
 
