@@ -40,7 +40,12 @@ namespace TaskrLibrary.FileIO
 
         public Task UpdateTask(Task task)
         {
-            throw new System.NotImplementedException();
+            using (DbConnection)
+            {    
+                var updatedTask = DbConnection.QuerySingle<Task>(@"UPDATE Task WHERE TaskId == @TaskId
+                                                                OUTPUT INSERTED.*", task);
+                return updatedTask;
+            }
         }
 
         private void CreateDb()
@@ -52,8 +57,8 @@ namespace TaskrLibrary.FileIO
                     @"CREATE TABLE Task
                     (
                         TaskId INTEGER IDENTITY PRIMARY KEY AUTOINCREMENT,
-                        Title VARCHAR(150) NOT NULL,
-                        CreatedOn TEXT,
+                        Title VARCHAR NOT NULL,
+                        CreatedOn TEXT NOT NULL,
                         IsActioned INTEGER NOT NULL,
                         IsCompleted INTEGER NOT NULL
                         
