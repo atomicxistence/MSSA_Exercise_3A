@@ -93,7 +93,7 @@ namespace TaskrLibrary
             var relevantTasks = tasks.SkipWhile(x => x.IsActioned);
             for (int i = 0; i < relevantTasks.Count() % PageSize; i++)
             {
-                var page = new Page();
+                var page = new Page(PageSize);
                 page.Tasks.AddRange(relevantTasks.Skip(i * PageSize).Take(PageSize));
                 pages.Add(page);
             }
@@ -111,7 +111,7 @@ namespace TaskrLibrary
 		{
 			if (Pages.Last().IsFull)
 			{
-				var newPage = new Page();
+				var newPage = new Page(PageSize);
 				newPage.Tasks.Add(task);
 				Pages.Add(newPage);
 			}
