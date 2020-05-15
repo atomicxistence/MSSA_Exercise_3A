@@ -10,19 +10,18 @@ namespace TaskrConsole
 		private Display display = new Display();
 		private Input input = new Input();
 		private Selection currentSelection = new Selection(0, 0);
-		private Page currentPage;
+		private Page page;
 
 		private bool forceRefresh;
 
 		public void Run()
 		{
-			Console.OutputEncoding = System.Text.Encoding.Unicode;
 			display.Initialize(taskr.GetPage(currentSelection.PageIndex));
 
 			while (true)
 			{
-				currentPage = taskr.GetPage(currentSelection.PageIndex);
-				display.Refresh(currentPage, currentSelection, forceRefresh);
+				page = taskr.GetPage(currentSelection.PageIndex);
+				display.Refresh(page, currentSelection, forceRefresh);
 				forceRefresh = false;
 
 				InputType action = InputType.Invalid;
@@ -97,7 +96,7 @@ namespace TaskrConsole
 					}
 					break;
 				case InputType.Select:
-					if (!currentPage.Tasks[currentSelection.ItemIndex].IsActioned)
+					if (!page.Tasks[currentSelection.ItemIndex].IsActioned)
 					{
 						TaskSubMenu();
 						forceRefresh = true;
@@ -127,7 +126,7 @@ namespace TaskrConsole
 			var taskMenuAction = InputType.Invalid;
 			var subMenuSelection = new Selection(0, 0);
 			var taskSubMenu = new Menu(MenuType.TaskMenu);
-			var task = currentPage.Tasks[currentSelection.ItemIndex];
+			var task = page.Tasks[currentSelection.ItemIndex];
 			var taskPrompt = "Select an option...";
 			bool isUsing = true;
 
@@ -137,7 +136,7 @@ namespace TaskrConsole
 			{
 				do
 				{
-					display.Refresh(currentPage, currentSelection, forceRefresh);
+					display.Refresh(page, currentSelection, forceRefresh);
 					display.SubMenuRefresh(taskSubMenu, subMenuSelection);
 					taskMenuAction = input.Selection(SelectionType.TaskActionSelection);
 				} while (taskMenuAction == InputType.Invalid);
@@ -170,7 +169,7 @@ namespace TaskrConsole
 							case OptionType.ActionTask:
 								task.Actioned();
 								taskr.CopyTaskToEndOfList(task);
-								if (taskr.RemoveCompletelyActionedPages(currentPage))
+								if (taskr.RemoveCompletelyActionedPages(page))
 								{
 									int adjustedPageIndex = currentSelection.PageIndex == 0 ? 0 : currentSelection.PageIndex - 1;
 									currentSelection = new Selection(0, adjustedPageIndex);
@@ -185,7 +184,7 @@ namespace TaskrConsole
 									task.Actioned();
 								}
 								task.Completed();
-								if (taskr.RemoveCompletelyActionedPages(currentPage))
+								if (taskr.RemoveCompletelyActionedPages(page))
 								{
 									int adjustedPageIndex = currentSelection.PageIndex == 0 ? 0 : currentSelection.PageIndex - 1;
 									currentSelection = new Selection(0, adjustedPageIndex);
@@ -226,7 +225,7 @@ namespace TaskrConsole
 			{
 				do
 				{
-					display.Refresh(currentPage, currentSelection, forceRefresh);
+					display.Refresh(page, currentSelection, forceRefresh);
 					display.SubMenuRefresh(quitMenu, quitSelection);
 					quitMenuAction = input.Selection(SelectionType.YesNoSubSelection);
 				} while (quitMenuAction == InputType.Invalid);

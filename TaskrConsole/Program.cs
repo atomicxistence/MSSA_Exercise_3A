@@ -6,10 +6,10 @@ namespace TaskrConsole
 	{
 		static void Main(string[] args)
 		{
+			Console.OutputEncoding = System.Text.Encoding.Unicode;
 			Console.CursorVisible = false;
 
-			TaskrConsoleManager tcm = new TaskrConsoleManager();
-			tcm.Run();
+			new TaskrConsoleManager().Run();
 		}
 	}
 }

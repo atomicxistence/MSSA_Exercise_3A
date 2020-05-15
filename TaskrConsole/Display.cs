@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TaskrLibrary;
 
 namespace TaskrConsole
@@ -415,10 +416,7 @@ namespace TaskrConsole
 
 		private void PrintEmptySpaceFill(int emptySpace)
 		{
-			for (int i = 0; i < emptySpace; i++)
-			{
-				Console.Write(" ");
-			}
+			Console.Write(new string(' ', emptySpace));
 		}
 	}
 }

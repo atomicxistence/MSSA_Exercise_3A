@@ -21,7 +21,7 @@ namespace TaskrLibrary.FileIO
 
             using (DbConnection)
             {
-                var tasks = DbConnection.Query<Task>("SELECT * FROM Task");
+                var tasks = DbConnection.Query<Task>("SELECT * FROM Task;");
                 return tasks.ToList();
             }
         }
@@ -42,8 +42,10 @@ namespace TaskrLibrary.FileIO
         {
             using (DbConnection)
             {    
-                var updatedTask = DbConnection.QuerySingle<Task>(@"UPDATE Task WHERE TaskId == @TaskId
-                                                                OUTPUT INSERTED.*", task);
+                var updatedTask = DbConnection.QuerySingle<Task>(@"UPDATE Task 
+                                                                SET IsActioned = @IsActioned, IsCompleted = @IsCompleted
+                                                                OUTPUT INSERTED.*
+                                                                WHERE TaskId == @TaskId;", task);
                 return updatedTask;
             }
         }
@@ -60,9 +62,8 @@ namespace TaskrLibrary.FileIO
                         Title VARCHAR NOT NULL,
                         CreatedOn TEXT NOT NULL,
                         IsActioned INTEGER NOT NULL,
-                        IsCompleted INTEGER NOT NULL
-                        
-                    )"
+                        IsCompleted INTEGER NOT NULL   
+                    );"
                 );
             }
         }
