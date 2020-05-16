@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TaskrConsoleUI.Common;
 
 namespace TaskrConsoleUI.Input
 {
-	public class Input
+	public class InputSelection
 	{
 		public ActionType Selection(ConsoleKey input, SelectionState state) =>
 			state switch
 			{
-                SelectionState.TaskPageSelection => 	TaskSelect(input),
-                SelectionState.TaskActionSelection => 	ActionSelect(input),
+                SelectionState.MainSelection => 		TaskSelect(input),
+                SelectionState.SubMenuSelection => 		ActionSelect(input),
                 SelectionState.ConfirmationSelection => ConfirmationSelect(input),
 				_=> 									ActionType.Invalid
 			};
@@ -35,6 +36,7 @@ namespace TaskrConsoleUI.Input
                 ConsoleKey.DownArrow => ActionType.NextItem,
                 ConsoleKey.Escape => 	ActionType.Back,
 				_ => 					ActionType.Invalid
+
 			};
 
 		private ActionType ConfirmationSelect(ConsoleKey input) =>

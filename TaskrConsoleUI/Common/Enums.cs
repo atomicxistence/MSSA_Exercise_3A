@@ -21,8 +21,8 @@
 
 	public enum SelectionState
 	{
-		TaskPageSelection,
-		TaskActionSelection,
+		MainSelection,
+		SubMenuSelection,
 		ConfirmationSelection,
 	}
 

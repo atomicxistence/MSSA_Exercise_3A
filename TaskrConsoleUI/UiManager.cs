@@ -9,21 +9,36 @@ namespace TaskrConsoleUI
 {
     public class UiManager
     {
-        private readonly Taskr taskr;
-        private Page currentPage;
+        private readonly IFileTransaction fileTrans;
+        private Page page;
+        private SelectionState currentState;
 
         public UiManager(IFileTransaction fileTrans)
         {
-            taskr = new Taskr(fileTrans);
+            this.fileTrans = fileTrans;
+            currentState = SelectionState.MainSelection;
         }
         public void Run()
         {
+            var taskr = new Taskr(fileTrans);
+            page = taskr.CurrentPage;
+
+            var input = new InputManager();
+
             //main loop
             while (true)
             {
+                while(!Console.KeyAvailable)
+                {
+                    //refresh display
+
+                }
                 //get user input
+                var keyPressed = Console.ReadKey(true).Key;
+                ActionType desiredAction = input.GetAction(keyPressed, currentState);
                 //action user input
-                //refresh display
+                Page newPage = input.PerformAction(desiredAction);
+
             }
         }
     }
