@@ -1,6 +1,7 @@
 using System;
 using TaskrConsoleUI.Common;
-using TaskrLibrary.Models;
+using TaskrLibrary;
+using TaskrLibrary.FileIO;
 
 namespace TaskrConsoleUI.Input
 {
@@ -8,15 +9,27 @@ namespace TaskrConsoleUI.Input
     {
         private InputSelection Selector { get;}
         private InputAction Actioner { get;}
-        public InputManager()
+        private SelectionState state;
+
+        public InputManager(IFileTransaction fileTrans)
         {
             Selector = new InputSelection();
-            Actioner = new InputAction();
+            Actioner = new InputAction(new Action<SelectionState>(ChangeState), fileTrans);
+            state = SelectionState.MainSelection;
         }
 
-        public ActionType GetAction(ConsoleKey input, SelectionState state) =>
+        public ActionType GetAction(ConsoleKey input) =>
             Selector.Selection(input, state);
 
-        public Page PerformAction(ActionType action) =>
-            Actioner.ActionInput(action);
+        public ActionResult PerformAction(ActionType action) =>
+            Actioner.ActionInput(action, state);
+
+        public ActionResult IntialPage() =>
+            Actioner.CurrentActionResult;
+
+        private void ChangeState(SelectionState newState)
+        {
+            state = newState;
+        }
+    }
 }

@@ -12,7 +12,7 @@ namespace TaskrConsoleUI
 
             var fileTrans = new SqliteTransaction();
 
-            new UiManager(fileTrans).Run();
+            new App(fileTrans).Run();
         }
     }
 }

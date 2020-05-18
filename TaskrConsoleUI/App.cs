@@ -7,38 +7,35 @@ using TaskrConsoleUI.Common;
 
 namespace TaskrConsoleUI
 {
-    public class UiManager
+    public class App
     {
         private readonly IFileTransaction fileTrans;
-        private Page page;
-        private SelectionState currentState;
 
-        public UiManager(IFileTransaction fileTrans)
+        public App(IFileTransaction fileTrans)
         {
             this.fileTrans = fileTrans;
-            currentState = SelectionState.MainSelection;
         }
         public void Run()
         {
-            var taskr = new Taskr(fileTrans);
-            page = taskr.CurrentPage;
-
-            var input = new InputManager();
+            var input = new InputManager(fileTrans);
+            var actionResult = input.IntialPage();
 
             //main loop
             while (true)
             {
                 while(!Console.KeyAvailable)
                 {
+                    //pass actionResult to display
                     //refresh display
-
                 }
                 //get user input
                 var keyPressed = Console.ReadKey(true).Key;
-                ActionType desiredAction = input.GetAction(keyPressed, currentState);
-                //action user input
-                Page newPage = input.PerformAction(desiredAction);
-
+                ActionType desiredAction = input.GetAction(keyPressed);
+                //action user input if the key pressed was valid
+                if (desiredAction != ActionType.Invalid) 
+                {
+                    actionResult = input.PerformAction(desiredAction);
+                }
             }
         }
     }
